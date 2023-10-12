@@ -9,7 +9,7 @@
 fn main() {
     let my_option: Option<()> = None;
     if let Some(_x) = my_option {
-        my_option.unwrap();
+        // my_option.unwrap();
     }
 
     let my_arr = &[
