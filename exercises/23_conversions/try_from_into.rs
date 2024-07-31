@@ -23,42 +23,60 @@ enum IntoColorError {
     IntConversion,
 }
 
+// TODO: Tuple implementation.
+// Correct RGB color values must be integers in the 0..=255 range.
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
 
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
-        let (Ok(red), Ok(green), Ok(blue)) = (
-            u8::try_from(tuple.0),
-            u8::try_from(tuple.1),
-            u8::try_from(tuple.2),
-        ) else {
+        if tuple.0 > 255 || tuple.1 > 255 || tuple.2 > 255  || tuple.0 < 0 || tuple.1 < 0 || tuple.2 < 0 {
             return Err(IntoColorError::IntConversion);
-        };
-
-        Ok(Self { red, green, blue })
+        } else {
+            return Ok(Color {
+                red: tuple.0 as u8,
+                green: tuple.1 as u8,
+                blue: tuple.2 as u8,
+            });
+        }
     }
 }
 
+// TODO: Array implementation.
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
 
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
-        // Reuse the implementation for a tuple.
-        Self::try_from((arr[0], arr[1], arr[2]))
+        if arr.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        } else if arr[0] > 255 || arr[1] > 255 || arr[2] > 255  || arr[0] < 0 || arr[1] < 0 || arr[2] < 0 {
+            return Err(IntoColorError::IntConversion);
+        } else {
+            return Ok(Color {
+                red: arr[0] as u8,
+                green: arr[1] as u8,
+                blue: arr[2] as u8,
+            });
+        }
     }
 }
 
+// TODO: Slice implementation.
+// This implementation needs to check the slice length.
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
 
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
-        // Check the length.
         if slice.len() != 3 {
             return Err(IntoColorError::BadLen);
+        } else if slice[0] > 255 || slice[1] > 255 || slice[2] > 255  || slice[0] < 0 || slice[1] < 0 || slice[2] < 0 {
+            return Err(IntoColorError::IntConversion);
+        } else {
+            return Ok(Color {
+               red: slice[0] as u8,
+               green: slice[1] as u8,
+               blue: slice[2] as u8,
+            })
         }
-
-        // Reuse the implementation for a tuple.
-        Self::try_from((slice[0], slice[1], slice[2]))
     }
 }
 

@@ -1,6 +1,11 @@
+// You can bring module paths into scopes and provide new names for them with
+// the `use` and `as` keywords.
+
 #[allow(dead_code)]
 mod delicious_snacks {
-    // Added `pub` and used the expected alias after `as`.
+    // TODO: Add the following two `use` statements after fixing them.
+    // use self::fruits::PEAR as ???;
+    // use self::veggies::CUCUMBER as ???;
     pub use self::fruits::PEAR as fruit;
     pub use self::veggies::CUCUMBER as veggie;
 
